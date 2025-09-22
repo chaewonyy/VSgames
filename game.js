@@ -239,7 +239,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.code === 'Digit3' || e.code === 'Numpad3') selectUpgrade(2);
             if (e.code === 'KeyR') rerollUpgrades();
             if (e.code === 'KeyB') toggleBanishMode();
-            if (e.code === 'KeyS') skipUpgrade();
         }
         if (e.code === 'KeyQ' && player.upgrades.dash && !player.isDashing && Date.now() >= player.dashReadyAt) {
             player.isDashing = true;
@@ -546,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const controlsHint = document.createElement('div');
         controlsHint.className = 'controls-hint';
-        controlsHint.textContent = `R: 리롤 (${player.reroll}) | B: 추방 (${player.banish}) | S: 스킵`;
+        controlsHint.textContent = `R: 리롤 (${player.reroll}) | B: 추방 (${player.banish})`;
         optionsContainer.appendChild(controlsHint);
 
         const getWeight = (rarity) => ({ common: 60, rare: 25, epic: 12, legend: 3 }[rarity]);
@@ -564,8 +563,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (weightedPool.length === 0) {
              const card = document.createElement('div');
              card.className = 'upgrade-card';
-             card.innerHTML = `<h3>더 이상 업그레이드가 없습니다!</h3><p>S를 눌러 계속 진행하세요.</p>`;
+             card.innerHTML = `<h3>더 이상 업그레이드가 없습니다!</h3><p>자동으로 계속 진행합니다...</p>`;
              optionsContainer.appendChild(card);
+             setTimeout(continueGame, 1500); // Automatically continue after a delay
              return;
         }
 
@@ -612,7 +612,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function rerollUpgrades() { if (player.reroll > 0) { player.reroll--; presentUpgradeOptions(); } }
     function toggleBanishMode() { if (player.banish > 0) { isBanishMode = !isBanishMode; ui.upgradeOptions.classList.toggle('banish-mode', isBanishMode); } }
-    function skipUpgrade() { continueGame(); }
 
     function continueGame() {
         ui.levelUpScreen.style.display = 'none';
